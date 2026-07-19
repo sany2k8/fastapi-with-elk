@@ -2,7 +2,7 @@
 
 FastAPI with structured JSON logging shipped into the **ELK stack** (**E**lasticsearch + **L**ogstash + **K**ibana, with **Filebeat** as the shipping agent), plus **Prometheus + Grafana** for metrics.
 
-This is the sibling of the [`fastapi-with-lpg`](../fastapi-with-lpg) project (Loki + Promtail + Grafana). The `app/` code is intentionally **identical** — it proves your application is decoupled from the logging backend. Only the shipping/storage/UI layer changes:
+This is the sibling of the [`fastapi-with-lpg`](https://github.com/sany2k8/fastapi-with-lpg) project (Loki + Promtail + Grafana). The `app/` code is intentionally **identical** — it proves your application is decoupled from the logging backend. Only the shipping/storage/UI layer changes:
 
 | Concern | LPG version | This version |
 |---|---|---|
