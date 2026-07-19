@@ -12,7 +12,7 @@ This is the sibling of the [`fastapi-with-lpg`](../fastapi-with-lpg) project (Lo
 | Log UI | Grafana Explore | Kibana Discover |
 | Metrics | Prometheus + Grafana | Prometheus + Grafana (unchanged) |
 
-> **Why keep Prometheus + Grafana?** ELK is a log platform, not a metrics time-series engine. "ELK for logs + Prometheus/Grafana for metrics" is a very common real-world pairing. See `PRD.md` for the full rationale and deep-dive.
+> **Why keep Prometheus + Grafana?** ELK is a log platform, not a metrics time-series engine. "ELK for logs + Prometheus/Grafana for metrics" is a very common real-world pairing. 
 
 ## Architecture
 
