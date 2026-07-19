@@ -1,0 +1,24 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    uid: prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+
+  # Optional one-pane-of-glass: explore ELK logs from Grafana too.
+  # Kibana remains the primary log UI for this project.
+  - name: Elasticsearch
+    uid: elasticsearch
+    type: elasticsearch
+    access: proxy
+    url: http://elasticsearch:9200
+    editable: true
+    jsonData:
+      index: "fastapi-logs-*"
+      timeField: "@timestamp"
+      logMessageField: "event"
+      logLevelField: "level"

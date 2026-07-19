@@ -1,0 +1,7 @@
+cluster.name: "fastapi-observability-cluster"
+network.host: 0.0.0.0
+
+# Single-node, no auth — local learning only. See PRD Section 27 for production.
+discovery.type: single-node
+xpack.security.enabled: false
+xpack.security.enrollment.enabled: false

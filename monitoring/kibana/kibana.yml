@@ -1,0 +1,6 @@
+server.host: "0.0.0.0"
+server.name: "fastapi-kibana"
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# Local-only setup with security disabled on the Elasticsearch side.
+telemetry.optIn: false

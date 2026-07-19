@@ -1,0 +1,30 @@
+[project]
+name = "fastapi-observability-elk"
+version = "0.1.0"
+description = "FastAPI + ELK (Elasticsearch, Logstash, Kibana, Filebeat) + Prometheus + Grafana observability starter"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "prometheus-fastapi-instrumentator>=7.0.0",
+    "structlog>=24.4.0",
+    "pydantic-settings>=2.6.0",
+    "asgi-correlation-id>=4.3.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "httpx>=0.27.0",
+    "ruff>=0.7.0",
+]
+
+[tool.uv]
+# Not an installable package — just an app run from source. `uv sync` installs
+# dependencies only, so no build backend is needed.
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

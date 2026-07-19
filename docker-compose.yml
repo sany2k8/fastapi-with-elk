@@ -1,0 +1,117 @@
+name: fastapi-observability-elk
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi-app-elk
+    env_file: .env
+    ports:
+      - "8001:8000"
+    networks:
+      - observability
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: elasticsearch-elk
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./monitoring/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - observability
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.15.3
+    container_name: logstash-elk
+    volumes:
+      - ./monitoring/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./monitoring/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    environment:
+      - "LS_JAVA_OPTS=-Xms256m -Xmx256m"
+    ports:
+      - "5044:5044"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - observability
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.15.3
+    container_name: filebeat-elk
+    user: root
+    volumes:
+      - ./monitoring/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command: ["--strict.perms=false"]
+    depends_on:
+      - logstash
+      - app
+    networks:
+      - observability
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: kibana-elk
+    volumes:
+      - ./monitoring/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - observability
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: prometheus-elk
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=15d"
+    ports:
+      - "9091:9090"
+    networks:
+      - observability
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    container_name: grafana-elk
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - observability
+
+networks:
+  observability:
+    driver: bridge
+
+volumes:
+  es_data:
+  prometheus_data:
+  grafana_data:
