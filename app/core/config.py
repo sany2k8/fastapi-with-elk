@@ -22,3 +22,4 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     """Cached so Settings() is only parsed once per process."""
     return Settings()
+    

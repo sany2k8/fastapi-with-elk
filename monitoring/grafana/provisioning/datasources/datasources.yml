@@ -22,4 +22,3 @@ datasources:
       timeField: "@timestamp"
       logMessageField: "event"
       logLevelField: "level"
-      

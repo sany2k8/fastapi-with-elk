@@ -27,3 +27,4 @@ async def call_external_service() -> dict:
 
     logger.info("external_service_ok", duration_ms=round(duration * 1000, 2))
     return {"latency_ms": round(duration * 1000, 2)}
+    

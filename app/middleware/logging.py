@@ -37,3 +37,4 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
             client_ip=request.client.host if request.client else None,
         )
         return response
+        

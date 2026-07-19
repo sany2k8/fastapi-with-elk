@@ -37,3 +37,4 @@ async def readiness():
     Add real dependency checks here (DB ping, cache ping, ...) as your project grows.
     """
     return {"status": "ready"}
+    

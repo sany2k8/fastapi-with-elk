@@ -44,3 +44,4 @@ class MetricsMiddleware(BaseHTTPMiddleware):
             method=request.method, path=path, status_code=response.status_code
         ).inc()
         return response
+        

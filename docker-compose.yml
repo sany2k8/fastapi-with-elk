@@ -115,4 +115,3 @@ volumes:
   es_data:
   prometheus_data:
   grafana_data:
-  

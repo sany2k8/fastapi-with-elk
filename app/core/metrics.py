@@ -47,3 +47,4 @@ def setup_metrics(app) -> None:
     instrumentator.instrument(app).expose(
         app, endpoint=settings.metrics_path, include_in_schema=False
     )
+    

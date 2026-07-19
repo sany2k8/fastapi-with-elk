@@ -9,4 +9,3 @@ scrape_configs:
       - targets: ["app:8000"]
         labels:
           service: "fastapi-observability-elk"
-          
